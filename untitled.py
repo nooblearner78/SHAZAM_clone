@@ -13,6 +13,14 @@ import scipy.ndimage as ndimage
 import matplotlib.pyplot as plt
 import pandas as pd
 import streamlit as st
+import pickle
+
+@st.cache_resource
+def load_database():
+    with open("fingerprints.pkl", "rb") as f:
+        return pickle.load(f)
+
+database = load_database()
 
 
 # =============================================================================
