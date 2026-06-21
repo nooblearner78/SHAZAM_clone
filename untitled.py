@@ -264,7 +264,17 @@ def match_and_predict(query_hashes, database):
 
 def init_state():
     if "database" not in st.session_state:
-        st.session_state.database = None
+        # Attempt to load the database automatically if the file exists
+        if os.path.exists(DEFAULT_DB_PATH):
+            try:
+                st.session_state.database = load_database(DEFAULT_DB_PATH)
+                st.session_state.database_stats = {"source": "Auto-loaded from disk"}
+            except Exception as e:
+                st.error(f"Error loading default database: {e}")
+                st.session_state.database = None
+        else:
+            st.session_state.database = None
+            
     if "database_stats" not in st.session_state:
         st.session_state.database_stats = None
     if "database_path" not in st.session_state:
